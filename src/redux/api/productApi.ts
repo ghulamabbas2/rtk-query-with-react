@@ -11,7 +11,7 @@ type Product = {
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["Products"],
+  tagTypes: ["Products", "Product"],
   endpoints: (builder) => ({
     getProducts: builder.query<Product[], void>({
       query: () => "/products",
@@ -34,6 +34,7 @@ export const productApi = createApi({
     }),
     getProductById: builder.query<{ product: Product }, string>({
       query: (id) => `/products/${id}`,
+      providesTags: ["Product"],
     }),
     createProduct: builder.mutation<Product, Partial<Product>>({
       query: (product) => ({
@@ -49,6 +50,7 @@ export const productApi = createApi({
           method: "PUT",
           body: product,
         }),
+        invalidatesTags: ["Product"],
       }
     ),
     deleteProduct: builder.mutation<void, string>({
