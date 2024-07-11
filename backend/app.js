@@ -32,7 +32,7 @@ app.get("/api/products", async (req, res) => {
 app.get("/api/products/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) return res.status(404).send("Product not found");
-  res.send(product);
+  res.send({ product });
 });
 
 // Create a new product

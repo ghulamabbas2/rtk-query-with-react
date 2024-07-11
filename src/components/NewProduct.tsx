@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useCreateProductMutation } from "../redux/api/productApi";
 
 const NewProduct: React.FC = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
 
+  const [createProduct, { data, error, isLoading, isSuccess }] =
+    useCreateProductMutation();
+
+  useEffect(() => {
+    if (error) alert(error);
+
+    if (isSuccess) {
+      alert("Product created successfully");
+      setName("");
+      setPrice(0);
+      setDescription("");
+    }
+  }, [error, isSuccess]);
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Add logic to handle form submission here
+    createProduct({ name, price, description });
   };
 
   return (
@@ -53,7 +69,7 @@ const NewProduct: React.FC = () => {
               ></textarea>
             </div>
             <button type="submit" className="btn btn-primary">
-              Create
+              {isLoading ? "Creating" : "Create"}
             </button>
           </form>
         </div>
